@@ -1,3 +1,23 @@
-[gd_scene format=3 uid="uid://dkbrd45v5pepp"]
+[gd_scene load_steps=3 format=3 uid="uid://dkbrd45v5pepp"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_4xowi"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
 
 [node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(3.7621446, 0, 0, 0, 1, 0, 0, 0, 2.588906, 0, 0, 0)
+mesh = SubResource("PlaneMesh_4xowi")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50907815, 0)
+mesh = SubResource("BoxMesh_4xowi")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.17922974, 0, 0, 0, 3.1862044, 0, 0, 0, 3.070366, -0.9079404, 0.75411034, -1.5590308)
+mesh = SubResource("BoxMesh_4xowi")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.23008375, 0, 0.9731709, 0, 1, 0, -0.9731709, 0, -0.23008375, 3.889469, 1.5551977, -1.1215271)
+fov = 55.0
