@@ -18,3 +18,8 @@ config/icon="res://icon.svg"
 [dotnet]
 
 project/assembly_name="pseudo-deferred"
+
+[rendering]
+
+rendering_device/fallback_to_d3d12=false
+rendering_device/fallback_to_opengl3=false
