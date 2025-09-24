@@ -1,10 +1,29 @@
-[gd_scene load_steps=3 format=3 uid="uid://dkbrd45v5pepp"]
+[gd_scene load_steps=6 format=3 uid="uid://dkbrd45v5pepp"]
+
+[ext_resource type="Script" uid="uid://c3a4tut81ipjy" path="res://DeferredRenderer/DeferredCompositor.cs" id="2_noarx"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4xowi"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
 
+[sub_resource type="CompositorEffect" id="CompositorEffect_a0tk4"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("2_noarx")
+metadata/_custom_type_script = "uid://c3a4tut81ipjy"
+
+[sub_resource type="Compositor" id="Compositor_r3fl7"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_a0tk4")])
+
 [node name="Node3D" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(3.7621446, 0, 0, 0, 1, 0, 0, 0, 2.588906, 0, 0, 0)
@@ -21,3 +40,6 @@ mesh = SubResource("BoxMesh_4xowi")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(-0.23008375, 0, 0.9731709, 0, 1, 0, -0.9731709, 0, -0.23008375, 3.889469, 1.5551977, -1.1215271)
 fov = 55.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+compositor = SubResource("Compositor_r3fl7")
