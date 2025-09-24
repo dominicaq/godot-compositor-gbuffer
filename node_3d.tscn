@@ -1,7 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://dkbrd45v5pepp"]
+[gd_scene load_steps=7 format=3 uid="uid://dkbrd45v5pepp"]
 
 [ext_resource type="Material" uid="uid://bst2i5tpf56ph" path="res://DeferredRenderer/GBufferMat.tres" id="1_noarx"]
-[ext_resource type="Script" uid="uid://c3a4tut81ipjy" path="res://DeferredRenderer/GBufferBuilder.cs" id="2_noarx"]
+[ext_resource type="Script" uid="uid://jktdkfuvtxi2" path="res://DeferredRenderer/RendererSetup.cs" id="2_noarx"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4xowi"]
 
@@ -9,20 +9,7 @@
 
 [sub_resource type="Environment" id="Environment_a202f"]
 
-[sub_resource type="CompositorEffect" id="CompositorEffect_a0tk4"]
-resource_local_to_scene = false
-resource_name = ""
-enabled = true
-effect_callback_type = 1
-access_resolved_color = true
-access_resolved_depth = true
-needs_motion_vectors = false
-needs_normal_roughness = true
-script = ExtResource("2_noarx")
-metadata/_custom_type_script = "uid://c3a4tut81ipjy"
-
 [sub_resource type="Compositor" id="Compositor_r3fl7"]
-compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_a0tk4")])
 
 [node name="Node3D" type="Node3D"]
 
@@ -51,3 +38,4 @@ fov = 55.0
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_a202f")
 compositor = SubResource("Compositor_r3fl7")
+script = ExtResource("2_noarx")
