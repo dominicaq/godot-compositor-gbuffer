@@ -11,9 +11,6 @@ namespace DeferredRenderer
         private Rid _sampler;
         private RenderingDevice _rd;
 
-        // Reference to the GBuffer builder
-        private GBufferBuilder _gBufferBuilder;
-
         public RayTracer()
         {
             _rd = RenderingServer.GetRenderingDevice();
@@ -31,14 +28,7 @@ namespace DeferredRenderer
             }
             CreateComputePipeline();
 
-            // Set this pass to run after the GBuffer pass
             EffectCallbackType = EffectCallbackTypeEnum.PostTransparent;
-        }
-
-        // Method to set the GBuffer reference (call this after creating both effects)
-        public void SetGBufferBuilder(GBufferBuilder gBufferBuilder)
-        {
-            _gBufferBuilder = gBufferBuilder;
         }
 
         private void CreateSampler()
@@ -93,55 +83,42 @@ namespace DeferredRenderer
 
         public override void _RenderCallback(int effectCallbackType, RenderData renderData)
         {
-            if (_gBufferBuilder?.GBuffer == null)
-            {
-                GD.PrintErr("GBuffer not available - make sure GBufferBuilder is set and runs before RayTracer");
+            if (renderData.GetRenderSceneBuffers() is not RenderSceneBuffersRD renderSceneBuffers)
                 return;
-            }
 
-            // Get the G-Buffer textures from the builder
-            var worldPosTexture = _gBufferBuilder.GBuffer[(int)GBufferBuilder.GBufferIndex.WorldPosition];
-            var signBitsTexture = _gBufferBuilder.GBuffer[(int)GBufferBuilder.GBufferIndex.SignBits];
-            var normalRoughnessTexture = _gBufferBuilder.GBuffer[(int)GBufferBuilder.GBufferIndex.NormalRoughness];
-            var depthTexture = _gBufferBuilder.GBuffer[(int)GBufferBuilder.GBufferIndex.Depth];
+            var colorTexture = renderSceneBuffers.GetColorLayer(0);
+            var normalRoughnessTexture = renderSceneBuffers.GetTexture("forward_clustered", "normal_roughness");
+            var depthTexture = renderSceneBuffers.GetDepthLayer(0);
 
-            // Validate that we have valid textures
-            if (!worldPosTexture.IsValid || !normalRoughnessTexture.IsValid ||
-                !signBitsTexture.IsValid || !depthTexture.IsValid)
-            {
-                GD.PrintErr("One or more G-Buffer textures are invalid");
-                return;
-            }
-
-            RayTracingPass(worldPosTexture, signBitsTexture, normalRoughnessTexture, depthTexture);
+            RayTracingPass(colorTexture, normalRoughnessTexture, depthTexture);
         }
 
-        private void RayTracingPass(Rid worldPosTexture, Rid signBitsTexture, Rid normalRoughnessTexture, Rid depthTexture)
+        private void RayTracingPass(Rid colorTexture, Rid normalRoughnessTexture, Rid depthTexture)
         {
             if (!_computePipeline.IsValid) return;
 
             var uniforms = new Array<RDUniform>();
 
-            // Bind world position as image (for read/write)
-            var worldPosUniform = new RDUniform
+            // Bind color buffer as image - binding 0
+            var colorUniform = new RDUniform
             {
                 UniformType = RenderingDevice.UniformType.Image,
                 Binding = 0
             };
-            worldPosUniform.AddId(worldPosTexture);
-            uniforms.Add(worldPosUniform);
+            colorUniform.AddId(colorTexture);
+            uniforms.Add(colorUniform);
 
-            // Bind sign bits (specular) texture with sampler
-            var signBitsUniform = new RDUniform
+            // Dummy binding 1 (required by shader)
+            var dummyUniform = new RDUniform
             {
                 UniformType = RenderingDevice.UniformType.SamplerWithTexture,
                 Binding = 1
             };
-            signBitsUniform.AddId(_sampler);
-            signBitsUniform.AddId(signBitsTexture);
-            uniforms.Add(signBitsUniform);
+            dummyUniform.AddId(_sampler);
+            dummyUniform.AddId(depthTexture); // Just reuse depth texture
+            uniforms.Add(dummyUniform);
 
-            // Bind normal/roughness texture with sampler
+            // Bind normal/roughness texture - binding 2
             var normalRoughnessUniform = new RDUniform
             {
                 UniformType = RenderingDevice.UniformType.SamplerWithTexture,
@@ -151,7 +128,7 @@ namespace DeferredRenderer
             normalRoughnessUniform.AddId(normalRoughnessTexture);
             uniforms.Add(normalRoughnessUniform);
 
-            // Bind depth texture with sampler
+            // Bind depth texture - binding 3
             var depthUniform = new RDUniform
             {
                 UniformType = RenderingDevice.UniformType.SamplerWithTexture,
@@ -163,7 +140,7 @@ namespace DeferredRenderer
 
             var uniformSet = _rd.UniformSetCreate(uniforms, _computeShader, 0);
 
-            var textureFormat = _rd.TextureGetFormat(worldPosTexture);
+            var textureFormat = _rd.TextureGetFormat(colorTexture);
             var xGroups = (textureFormat.Width + 15) / 16;
             var yGroups = (textureFormat.Height + 15) / 16;
 

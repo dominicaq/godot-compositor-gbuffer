@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://dkbrd45v5pepp"]
+[gd_scene load_steps=10 format=3 uid="uid://dkbrd45v5pepp"]
 
 [ext_resource type="Material" uid="uid://bst2i5tpf56ph" path="res://DeferredRenderer/GBufferMat.tres" id="1_noarx"]
-[ext_resource type="Script" uid="uid://jktdkfuvtxi2" path="res://DeferredRenderer/RendererSetup.cs" id="2_noarx"]
+[ext_resource type="Script" uid="uid://c3a4tut81ipjy" path="res://DeferredRenderer/GBufferBuilder.cs" id="2_noarx"]
+[ext_resource type="Script" uid="uid://b7smhnykb6247" path="res://DeferredRenderer/RayTracer.cs" id="3_a0tk4"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4xowi"]
 
@@ -9,7 +10,28 @@
 
 [sub_resource type="Environment" id="Environment_a202f"]
 
+[sub_resource type="CompositorEffect" id="CompositorEffect_jka67"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("2_noarx")
+metadata/_custom_type_script = "uid://c3a4tut81ipjy"
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_i5arm"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("3_a0tk4")
+metadata/_custom_type_script = "uid://b7smhnykb6247"
+
 [sub_resource type="Compositor" id="Compositor_r3fl7"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_jka67"), SubResource("CompositorEffect_i5arm")])
 
 [node name="Node3D" type="Node3D"]
 
@@ -38,4 +60,3 @@ fov = 55.0
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_a202f")
 compositor = SubResource("Compositor_r3fl7")
-script = ExtResource("2_noarx")

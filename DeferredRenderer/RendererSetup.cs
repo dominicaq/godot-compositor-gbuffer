@@ -22,20 +22,15 @@ namespace DeferredRenderer
             _rayTracer = new RayTracer();
 
             // Link them together
-            _rayTracer.SetGBufferBuilder(_gBufferBuilder);
+            // _rayTracer.SetGBufferBuilder(_gBufferBuilder);
 
-            // Add effects to the compositor
             var compositorEffects = Compositor.CompositorEffects;
-
-            // Resize the array to hold our effects
             compositorEffects.Resize(2);
-
-            // Add the GBuffer builder first (index 0)
             compositorEffects[0] = _gBufferBuilder;
-
-            // Add the ray tracer second (index 1)
             compositorEffects[1] = _rayTracer;
-
+            GD.Print($"Added {compositorEffects.Count} effects to compositor");
+            GD.Print($"GBuffer effect callback type: {_gBufferBuilder.EffectCallbackType}");
+            GD.Print($"RayTracer effect callback type: {_rayTracer.EffectCallbackType}");
             GD.Print("Deferred renderer setup complete");
         }
     }
