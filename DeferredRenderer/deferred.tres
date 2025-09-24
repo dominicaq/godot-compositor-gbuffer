@@ -1,9 +1,0 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bst2i5tpf56ph"]
-
-[ext_resource type="Shader" uid="uid://suons7pevfs2" path="res://DeferredRenderer/deferred.gdshader" id="1_23r72"]
-
-[resource]
-render_priority = 0
-shader = ExtResource("1_23r72")
-shader_parameter/far_plane = 1000.0
-shader_parameter/material_id = 0.0
