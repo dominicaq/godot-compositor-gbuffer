@@ -1,18 +1,16 @@
-# Godot 4.5 Deferred Renderer
+# Godot 4.5 Deferred Renderer Example
 
-A custom deferred rendering solution that provides an example of G-Buffer texture access using the forward+ renderer.
-
-## ⚠️ Important
-
-**This bypasses Godot's lighting pipeline.** You'll need to implement your own lighting in shaders.
+A custom deferred rendering solution that provides an example of scene texture access using the forward+ renderer.
+This repo has two examples, `GBufferBuilder.cs` demonstrates just grabbing the scene render textures. `ExamplePass.cs` demonstrates
+deferred lighting with these textures using a compute shader.
 
 ## Why?
 
-I'm aware of the bandwidth and performance implications of deferred rendering, but for my specific use case I needed direct access to these G-Buffer textures. As of Godot 4.5 there is no officially supported deferred renderer.
+I'm aware of the bandwidth and performance implications of deferred rendering, but for my specific use case I needed direct access to these textures. As of Godot 4.5 there is no officially supported deferred renderer. However, godot gives access to these textures with `CompositorEffects`, making this possible.
 
 ## What It Does
 
-Extracts G-Buffer textures from Godot's forward renderer:
+Extracts scene render textures from Godot's forward+ renderer:
 - Color buffer
 - Normal/Roughness buffer
 - Depth buffer
@@ -21,10 +19,10 @@ Extracts G-Buffer textures from Godot's forward renderer:
 
 1. Add scripts to your Godot 4.5 project
 2. Create a Compositor resource
-3. Add the GBufferBuilder effect
+3. Add desired compositor effect
 4. Use textures in your compute shaders
 
-## Shader Bindings
+## Shader Bindings (glsl)
 ```glsl
 layout(set = 0, binding = 0, rgba8) uniform image2D color_image;
 layout(set = 0, binding = 1) uniform sampler2D normal_roughness_texture;

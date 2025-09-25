@@ -10,6 +10,16 @@ layout(push_constant) uniform PushConstants {
     mat4 inv_view_matrix;
 } pc;
 
+// If you wish to sample the normal buffer, you need this from Godot's official docs
+vec4 normal_roughness_compatibility(vec4 p_normal_roughness) {
+    float roughness = p_normal_roughness.w;
+    if (roughness > 0.5) {
+        roughness = 1.0 - roughness;
+    }
+    roughness /= (127.0 / 255.0);
+    return vec4(normalize(p_normal_roughness.xyz * 2.0 - 1.0) * 0.5 + 0.5, roughness);
+}
+
 vec3 reconstructWorldPosition(vec2 uv, float depth) {
     vec2 ndc = uv * 2.0 - 1.0;
     vec4 ndcPos = vec4(ndc, depth * 2.0 - 1.0, 1.0);
