@@ -10,10 +10,9 @@ namespace DeferredRenderer
 
         public enum GBufferIndex
         {
-            WorldPosition = 0,   // Absolute world position
-            SignBits = 1,        // Sign bits (specular buffer)
-            NormalRoughness = 2, // Normal data (normal buffer)
-            Depth = 3,
+            Color = 0,
+            NormalRoughness = 1,
+            Depth = 2,
         };
 
         public GBufferBuilder()
@@ -36,8 +35,7 @@ namespace DeferredRenderer
             if (renderData.GetRenderSceneBuffers() is not RenderSceneBuffersRD renderSceneBuffers)
                 return;
 
-            GBuffer[(int)GBufferIndex.WorldPosition] = renderSceneBuffers.GetColorLayer(0);
-            GBuffer[(int)GBufferIndex.SignBits] = renderSceneBuffers.GetTexture("forward_clustered", "specular");
+            GBuffer[(int)GBufferIndex.Color] = renderSceneBuffers.GetColorLayer(0);
             GBuffer[(int)GBufferIndex.NormalRoughness] = renderSceneBuffers.GetTexture("forward_clustered", "normal_roughness");
             GBuffer[(int)GBufferIndex.Depth] = renderSceneBuffers.GetDepthLayer(0);
         }
