@@ -6,6 +6,10 @@ A custom deferred rendering solution that provides G-Buffer texture access.
 
 **This bypasses Godot's lighting pipeline.** You'll need to implement your own lighting in shaders.
 
+## Why?
+
+I'm aware of the bandwidth and performance implications of deferred rendering, but for my specific use case I needed direct access to these G-Buffer textures. As of Godot 4.5 there is no officially supported deferred renderer.
+
 ## What It Does
 
 Extracts G-Buffer textures from Godot's forward renderer:
