@@ -3,6 +3,9 @@ using Godot.Collections;
 
 namespace DeferredCompositor
 {
+    // =========================================================================
+    // Demonstrates genrating textures
+    // =========================================================================
     [GlobalClass]
     public partial class GBufferBuilder : CompositorEffect
     {
@@ -24,7 +27,6 @@ namespace DeferredCompositor
             }
 
             NeedsNormalRoughness = true;
-            NeedsSeparateSpecular = true;
             AccessResolvedColor = true;
             AccessResolvedDepth = true;
             EffectCallbackType = EffectCallbackTypeEnum.PostOpaque;

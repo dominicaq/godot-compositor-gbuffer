@@ -4,6 +4,9 @@ using System;
 
 namespace DeferredCompositor
 {
+    // =========================================================================
+    // Demonstrates getting textures + doing a light pass
+    // =========================================================================
     [GlobalClass]
     public partial class ExamplePass : CompositorEffect
     {
@@ -12,6 +15,9 @@ namespace DeferredCompositor
         private Rid _sampler;
         private RenderingDevice _rd;
 
+        // =====================================================================
+        // Setup
+        // =====================================================================
         public ExamplePass()
         {
             _rd = RenderingServer.GetRenderingDevice();
@@ -59,6 +65,9 @@ namespace DeferredCompositor
                 _computePipeline = _rd.ComputePipelineCreate(_computeShader);
         }
 
+        // =====================================================================
+        // Rendering
+        // =====================================================================
         public override void _RenderCallback(int effectCallbackType, RenderData renderData)
         {
             if (renderData.GetRenderSceneBuffers() is not RenderSceneBuffersRD rb)
@@ -117,6 +126,9 @@ namespace DeferredCompositor
             _rd.ComputeListEnd();
         }
 
+        // =====================================================================
+        // Push constant packing
+        // =====================================================================
         private static byte[] MatrixToBytes(Projection m)
         {
             var f = new float[16]
