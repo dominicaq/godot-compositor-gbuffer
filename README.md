@@ -1,6 +1,6 @@
 # Godot 4.5 Deferred Renderer
 
-A custom deferred rendering solution that provides an example of G-Buffer texture access using the forward+ rennderer.
+A custom deferred rendering solution that provides an example of G-Buffer texture access using the forward+ renderer.
 
 ## ⚠️ Important
 
