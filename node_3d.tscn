@@ -1,12 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://dkbrd45v5pepp"]
+[gd_scene load_steps=11 format=3 uid="uid://dkbrd45v5pepp"]
 
-[ext_resource type="Material" uid="uid://bst2i5tpf56ph" path="res://DeferredRenderer/unlit_mat.tres" id="1_noarx"]
-[ext_resource type="Script" uid="uid://c3a4tut81ipjy" path="res://DeferredRenderer/GBufferBuilder.cs" id="2_noarx"]
-[ext_resource type="Script" uid="uid://b7smhnykb6247" path="res://DeferredRenderer/RayTracer.cs" id="3_a0tk4"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_4xowi"]
+[ext_resource type="Material" uid="uid://bst2i5tpf56ph" path="res://shaders/unlit_mat.tres" id="1_noarx"]
+[ext_resource type="Script" uid="uid://c3a4tut81ipjy" path="res://DeferredCompositor/GBufferBuilder.cs" id="2_noarx"]
+[ext_resource type="Material" uid="uid://dmx0rw24btoyh" path="res://shaders/godot_unlit.tres" id="2_r3fl7"]
+[ext_resource type="Script" uid="uid://b7smhnykb6247" path="res://DeferredCompositor/ExamplePass.cs" id="3_a0tk4"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_4xowi"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_4xowi"]
 
 [sub_resource type="Environment" id="Environment_a202f"]
 
@@ -35,22 +36,41 @@ compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_jka6
 
 [node name="Node3D" type="Node3D"]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+material_override = ExtResource("2_r3fl7")
+mesh = SubResource("BoxMesh_4xowi")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_noarx")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Geometry"]
+transform = Transform3D(0.8937105, -0.06165395, -0.44438785, 0.2770946, 0.8548645, 0.4386631, 0.3528461, -0.5151753, 0.7810853, 0.5750022, 1.6793584, -2.031305)
+material_override = ExtResource("2_r3fl7")
+mesh = SubResource("BoxMesh_4xowi")
+skeleton = NodePath("../..")
+surface_material_override/0 = ExtResource("1_noarx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry"]
 transform = Transform3D(3.7621446, 0, 0, 0, 1, 0, 0, 0, 2.588906, 0.003833294, -0.007856369, -0.0016936064)
 material_override = ExtResource("1_noarx")
 mesh = SubResource("PlaneMesh_4xowi")
+skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("1_noarx")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50907815, 0)
-material_override = ExtResource("1_noarx")
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Geometry"]
+transform = Transform3D(0.93044317, 0, -0.36643612, 0, 1, 0, 0.36643612, 0, 0.93044317, -1.7895069, 0.50907815, -0.09989786)
+material_override = ExtResource("2_r3fl7")
 mesh = SubResource("BoxMesh_4xowi")
+skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("1_noarx")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Geometry"]
 transform = Transform3D(-0.17922974, 0, 0, 0, 3.1862044, 0, 0, 0, 3.070366, -0.9079404, 0.75411034, -1.5590308)
 material_override = ExtResource("1_noarx")
 mesh = SubResource("BoxMesh_4xowi")
+skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("1_noarx")
 
 [node name="Camera3D" type="Camera3D" parent="."]
